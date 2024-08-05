@@ -2,26 +2,26 @@
 
 [![version][link-sdk-version]][link-sdk-pod-url] [![swift compatibility][link-sdk-swift-compat]][link-sdk-spi-url]
 
-This repo provides Swift Package Manager support for [plaid-link-ios](https://github.com/plaid/plaid-link-ios). 
+This repository provides Swift Package Manager support for [plaid-link-ios](https://github.com/plaid/plaid-link-ios), allowing you to easily integrate Plaid's financial services into your iOS applications.
 
 ### Installing Plaid Link
 
-To install Plaid Link using [Swift Package Manager](https://github.com/apple/swift-package-manager) you can follow the [tutorial published by Apple](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) using the URL for this repo with the current version:
+To install Plaid Link using [Swift Package Manager](https://github.com/apple/swift-package-manager) you can follow the [tutorial published by Apple](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) using the URL for this repository with the current version:
 
 1. In Xcode, select “File” → “Add Packages...”
-1. Enter https://github.com/plaid/plaid-link-ios-spm.git
+2. Enter `https://github.com/plaid/plaid-link-ios-spm.git`
 
-or you can add the following dependency to your `Package.swift`:
+Alternatively, you can add the following dependency to your `Package.swift` file:
 
 ```swift
 .package(url: "https://github.com/plaid/plaid-link-ios-spm.git", from: "5.6.0")
 ```
 
-### Why is there a separate repo for Swift Package Manager support?
+### Why is there a separate repository for Swift Package Manager support?
 
-The main git repository for [plaid-link-ios](https://github.com/plaid/plaid-link-ios) is very large (~1 GB), and Swift Package Manager always downloads the full repository with all git history. This [plaid-link-ios-spm](https://github.com/plaid/plaid-link-ios-spm) repo is much smaller (less than 500kb), so can be downloaded much more quickly.
+The main git repository for [plaid-link-ios](https://github.com/plaid/plaid-link-ios) is very large (~1 GB), and Swift Package Manager always downloads the full repository with all git history. This [plaid-link-ios-spm](https://github.com/plaid/plaid-link-ios-spm) repository is much smaller (less than 500kb), so can be downloaded much more quickly.
 
-Instead of downloading the full git history of Plaid Link iOS and building it from source, this repo just contains a pointer to the precompiled XCFramework included in the [latest plaid-link-ios release](https://github.com/plaid/plaid-link-ios/releases/latest) (typically ~20MB). Since [plaid-link-ios](https://github.com/plaid/plaid-link-ios) doesn't provide source code it's strongly recommended that user's depend on [plaid-link-ios-spm](https://github.com/plaid/plaid-link-ios-spm) instead.
+Instead of downloading the full git history of Plaid Link iOS and building it from source, this repository just contains a pointer to the precompiled XCFramework included in the [latest plaid-link-ios release](https://github.com/plaid/plaid-link-ios/releases/latest) (typically ~20MB). Since [plaid-link-ios](https://github.com/plaid/plaid-link-ios) doesn't provide source code it's strongly recommended that users depend on [plaid-link-ios-spm](https://github.com/plaid/plaid-link-ios-spm) instead.
 
 When using plaid-link-ios-spm, the downloaded `LinkKit.xframework` isn't visible in the project navigator. To validate the authenticity of a plaid-link-ios-spm package, you can confirm that the `Package.swift` file references a binary XCFramework from https://github.com/plaid/plaid-link-ios/releases. 
 
