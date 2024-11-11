@@ -1,12 +1,12 @@
 // swift-tools-version:5.7
 import PackageDescription
 
-/// A precompiled XCFramework of the plaid-link-ios repo that was compiled with Xcode 15.0.1
-/// This XCFramework can be used by Xcode 15.0.1 and later.
+/// A precompiled XCFramework of the plaid-link-ios repo that was compiled with Xcode 16.1.0
+/// This XCFramework can be used by Xcode 16.1.0 and later.
 let linkKitXCFramework = Target.binaryTarget(
   name: "LinkKit",
-  url: "https://github.com/plaid/plaid-link-ios/releases/download/5.6.1/LinkKit.xcframework.zip",
-  checksum: "a5f547b0ae69875f1e1ef3c56754ba432cf9c15afef0a4dc06ef85ba957d08b5"
+  url: "https://github.com/plaid/plaid-link-ios/releases/download/6.0.0/LinkKit.xcframework.zip",
+  checksum: "9fb7edabf9018da0aa01389a12659e048d6492c1133fed75b3dcd65a237e685a"
 )
 
 let package = Package(
