@@ -14,7 +14,7 @@ To install Plaid Link using [Swift Package Manager](https://github.com/apple/swi
 Alternatively, you can add the following dependency to your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/plaid/plaid-link-ios-spm.git", from: "5.6.0")
+.package(url: "https://github.com/plaid/plaid-link-ios-spm.git", from: "6.0.0")
 ```
 
 ### Why is there a separate repository for Swift Package Manager support?
