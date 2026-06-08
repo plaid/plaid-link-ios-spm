@@ -11,7 +11,7 @@ let linkKitXCFramework = Target.binaryTarget(
 
 let package = Package(
   name: "LinkKit",
-  platforms: [.iOS(.v15)],
+  platforms: [.iOS(.v14)],
   products: [.library(name: "LinkKit", targets: ["LinkKit", "LinkKitSub"])],
   targets: [
     linkKitXCFramework,
