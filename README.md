@@ -37,6 +37,8 @@ When using plaid-link-ios-spm, the downloaded `LinkKit.xframework` isn't visible
 
 📚 Detailed instructions on how to integrate with Plaid Link for iOS can be found in our main documentation at [plaid.com/docs/link/ios][link-ios-docs]. 
 
+For details on updating from LinkKit v6 to v7, see the [v7 migration guide](v7-migration-guide.md).
+
 
 [link-ios-docs]: https://plaid.com/docs/link/ios
 [link-sdk-version]: https://img.shields.io/cocoapods/v/Plaid
