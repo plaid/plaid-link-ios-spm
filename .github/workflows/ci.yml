@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build Swift Package
+    name: Build And Test Swift Package
     runs-on: macos-15
 
     steps:
@@ -21,3 +21,22 @@ jobs:
 
       - name: Build package
         run: xcodebuild build -scheme LinkKit -destination 'generic/platform=iOS' -derivedDataPath .build/DerivedData
+
+      - name: Run ObjC compatibility tests
+        run: |
+          xcodebuild test \
+            -scheme LinkKit-Package \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -derivedDataPath .build/ObjCTestsDerivedData \
+            -clonedSourcePackagesDirPath .build/SourcePackages \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Build ObjC demo app
+        run: |
+          xcodebuild build \
+            -project LinkDemo-ObjC/LinkDemo-ObjC.xcodeproj \
+            -scheme LinkDemo-ObjC \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath .build/ObjCDemoDerivedData \
+            -clonedSourcePackagesDirPath .build/SourcePackages \
+            CODE_SIGNING_ALLOWED=NO

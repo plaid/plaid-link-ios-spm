@@ -12,9 +12,23 @@ let linkKitXCFramework = Target.binaryTarget(
 let package = Package(
   name: "LinkKit",
   platforms: [.iOS(.v15)],
-  products: [.library(name: "LinkKit", targets: ["LinkKit", "LinkKitSub"])],
+  products: [
+    .library(name: "LinkKit", targets: ["LinkKit", "LinkKitSub"]),
+    .library(name: "LinkKitObjC", targets: ["LinkKitObjC"]),
+  ],
   targets: [
     linkKitXCFramework,
+    .target(
+      name: "LinkKitObjC",
+      dependencies: ["LinkKitObjCInternal", "LinkKit"],
+      path: "Sources/ObjC-Support/Swift"
+    ),
+    .target(
+      name: "LinkKitObjCInternal",
+      dependencies: ["LinkKit"],
+      path: "Sources/ObjC-Support/ObjectiveC",
+      publicHeadersPath: "include"
+    ),
 
     // Without at least one regular (non-binary) target, this package doesn't show up
     // in Xcode under "Frameworks, Libraries, and Embedded Content". That prevents
@@ -22,6 +36,10 @@ let package = Package(
     // ran on a physical device. As a workaround, we can include a stub target
     // with at least one source file.
     // https://github.com/apple/swift-package-manager/issues/6069
-    .target(name: "LinkKitSub", path: "Sources", resources: [.copy("Resources/PrivacyInfo.xcprivacy")]),
+    .target(name: "LinkKitSub", path: "Sources/LinkKitSub", resources: [.copy("Resources/PrivacyInfo.xcprivacy")]),
+    .testTarget(
+      name: "LinkKitObjCTests",
+      dependencies: ["LinkKit", "LinkKitObjC", "LinkKitObjCInternal"]
+    ),
   ]
 )
