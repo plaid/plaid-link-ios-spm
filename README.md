@@ -17,6 +17,9 @@ Alternatively, you can add the following dependency to your `Package.swift` file
 .package(url: "https://github.com/plaid/plaid-link-ios-spm.git", from: "6.0.0")
 ```
 
+Swift integrations should import the `LinkKit` module. Objective-C integrations
+should link the `LinkKitObjC` product and import the `LinkKitObjC` module.
+
 ### Why is there a separate repository for Swift Package Manager support?
 
 The main git repository for [plaid-link-ios](https://github.com/plaid/plaid-link-ios) is very large (~1 GB), and Swift Package Manager always downloads the full repository with all git history. This [plaid-link-ios-spm](https://github.com/plaid/plaid-link-ios-spm) repository is much smaller (less than 500kb), so can be downloaded much more quickly.
@@ -27,12 +30,14 @@ When using plaid-link-ios-spm, the downloaded `LinkKit.xframework` isn't visible
 
 ## Additional Support
 
-📱 The [plaid-link-ios](https://github.com/plaid/plaid-link-ios) repository contains multiple sample applications (requiring Xcode 14) that demonstrate integration and use of Plaid Link for iOS.
+📱 Sample applications demonstrate integration and use of Plaid Link for iOS.
 * [Swift+UIKit](https://github.com/plaid/plaid-link-ios/tree/master/LinkDemo-Swift)
 * [Swift+SwiftUI](https://github.com/plaid/plaid-link-ios/tree/master/LinkDemo-SwiftUI)
-* [Objective-C](https://github.com/plaid/plaid-link-ios/tree/master/LinkDemo-ObjC)
+* [Objective-C](LinkDemo-ObjC)
 
 📚 Detailed instructions on how to integrate with Plaid Link for iOS can be found in our main documentation at [plaid.com/docs/link/ios][link-ios-docs]. 
+
+For details on updating from LinkKit v6 to v7, see the [v7 migration guide](v7-migration-guide.md).
 
 
 [link-ios-docs]: https://plaid.com/docs/link/ios

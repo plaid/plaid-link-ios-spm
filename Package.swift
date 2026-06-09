@@ -5,16 +5,30 @@ import PackageDescription
 /// This XCFramework can be used by Xcode 16.1.0 and later.
 let linkKitXCFramework = Target.binaryTarget(
   name: "LinkKit",
-  url: "https://github.com/plaid/plaid-link-ios/releases/download/6.4.7/LinkKit.xcframework.zip",
-  checksum: "15b7196872ab42c30828a7d9ee745ab409e155a96aec512951096dd17ce198e6"
+  url: "https://github.com/plaid/plaid-link-ios/releases/download/7.0.0/LinkKit.xcframework.zip",
+  checksum: "ca6022cb1bc2844c7d313134d8fbae3b946e9a14bc2f22bf379161314908fce4"
 )
 
 let package = Package(
   name: "LinkKit",
-  platforms: [.iOS(.v14)],
-  products: [.library(name: "LinkKit", targets: ["LinkKit", "LinkKitSub"])],
+  platforms: [.iOS(.v15)],
+  products: [
+    .library(name: "LinkKit", targets: ["LinkKit", "LinkKitSub"]),
+    .library(name: "LinkKitObjC", targets: ["LinkKitObjC"]),
+  ],
   targets: [
     linkKitXCFramework,
+    .target(
+      name: "LinkKitObjC",
+      dependencies: ["LinkKitObjCInternal", "LinkKit"],
+      path: "Sources/ObjC-Support/Swift"
+    ),
+    .target(
+      name: "LinkKitObjCInternal",
+      dependencies: ["LinkKit"],
+      path: "Sources/ObjC-Support/ObjectiveC",
+      publicHeadersPath: "include"
+    ),
 
     // Without at least one regular (non-binary) target, this package doesn't show up
     // in Xcode under "Frameworks, Libraries, and Embedded Content". That prevents
@@ -22,6 +36,10 @@ let package = Package(
     // ran on a physical device. As a workaround, we can include a stub target
     // with at least one source file.
     // https://github.com/apple/swift-package-manager/issues/6069
-    .target(name: "LinkKitSub", path: "Sources", resources: [.copy("Resources/PrivacyInfo.xcprivacy")]),
+    .target(name: "LinkKitSub", path: "Sources/LinkKitSub", resources: [.copy("Resources/PrivacyInfo.xcprivacy")]),
+    .testTarget(
+      name: "LinkKitObjCTests",
+      dependencies: ["LinkKit", "LinkKitObjC", "LinkKitObjCInternal"]
+    ),
   ]
 )
