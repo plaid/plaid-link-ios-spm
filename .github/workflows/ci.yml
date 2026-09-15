@@ -21,11 +21,23 @@ jobs:
       - name: Build package
         run: xcodebuild build -scheme LinkKit -destination 'generic/platform=iOS' -derivedDataPath .build/DerivedData
 
+      - name: Select iOS Simulator
+        run: |
+          SIMULATOR_ID=$(xcrun simctl list devices available --json \
+            | python3 -c "import json,sys; devices=json.load(sys.stdin)['devices']; candidates=[d for runtime in devices for d in devices[runtime] if d.get('isAvailable') and d['name'].startswith('iPhone')]; print(candidates[0]['udid'] if candidates else '')")
+          if [ -z "$SIMULATOR_ID" ]; then
+            echo "No available iPhone simulator found" >&2
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Using simulator $SIMULATOR_ID"
+          echo "SIMULATOR_ID=$SIMULATOR_ID" >> "$GITHUB_ENV"
+
       - name: Run ObjC compatibility tests
         run: |
           xcodebuild test \
             -scheme LinkKit-Package \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
             -derivedDataPath .build/ObjCTestsDerivedData \
             -clonedSourcePackagesDirPath .build/SourcePackages \
             CODE_SIGNING_ALLOWED=NO
