@@ -179,6 +179,7 @@ typedef NS_ENUM(NSInteger, PLKViewNameValue) {
     PLKViewNameValueInstantMicrodepositVerification,
     PLKViewNameValueSameDayMicrodepositVerification,
     PLKViewNameValueTransferStatusCheck,
+    PLKViewNameValueInstitutionLoginInstructions,
     // Add new enum cases directly above this line to avoid breaking API changes
 };
 

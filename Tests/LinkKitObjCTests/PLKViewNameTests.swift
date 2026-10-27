@@ -236,6 +236,12 @@ final class PLKViewNameTests: XCTestCase {
         XCTAssertEqual(objcValue, .verifyEmail)
     }
 
+    func testInstitutionLoginInstructionsToObjCValue() {
+        let viewName = ViewName.institutionLoginInstructions
+        let objcValue = viewName.toObjCValue
+        XCTAssertEqual(objcValue, .institutionLoginInstructions)
+    }
+
     func testUnknownToObjCValue() {
         let viewName = ViewName.unknown("CUSTOM_VIEW")
         let objcValue = viewName.toObjCValue

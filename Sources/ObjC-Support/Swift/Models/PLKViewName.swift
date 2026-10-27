@@ -97,6 +97,8 @@ extension ViewName {
             return .sameDayMicrodepositVerification
         case .transferStatusCheck:
             return .transferStatusCheck
+        case .institutionLoginInstructions:
+            return .institutionLoginInstructions
         case .unknown:
             return nil
         @unknown default:
