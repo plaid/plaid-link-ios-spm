@@ -5,8 +5,8 @@ import PackageDescription
 /// This XCFramework can be used by Xcode 16.1.0 and later.
 let linkKitXCFramework = Target.binaryTarget(
   name: "LinkKit",
-  url: "https://github.com/plaid/plaid-link-ios/releases/download/7.2.3/LinkKit.xcframework.zip",
-  checksum: "d49161fb5891353f01214c5a44d10f18d22b1262d14237ed3534aa00eb47ec74"
+  url: "https://github.com/plaid/plaid-link-ios/releases/download/7.3.0/LinkKit.xcframework.zip",
+  checksum: "4694609b0fa8311194a92e9a8b7810a57cc726546cbe0dea2e62694239ee38d7"
 )
 
 let package = Package(
