@@ -46,6 +46,24 @@ final class PLKPlaidFinanceKitTests: XCTestCase {
         XCTAssertEqual(PLKPlaidFinanceKit.PLKSyncBehavior.simulated.rawValue, 1)
     }
 
+    // MARK: - Status
+
+    func testFinanceKitStatusToObjcCases() {
+        XCTAssertEqual(PlaidFinanceKit.Status.unavailable.toObjC, .unavailable)
+        XCTAssertEqual(PlaidFinanceKit.Status.notDetermined.toObjC, .notDetermined)
+        XCTAssertEqual(PlaidFinanceKit.Status.denied.toObjC, .denied)
+        XCTAssertEqual(PlaidFinanceKit.Status.authorized.toObjC, .authorized)
+        XCTAssertEqual(PlaidFinanceKit.Status.unknown.toObjC, .unknown)
+    }
+
+    func testFinanceKitStatusRawValues() {
+        XCTAssertEqual(PLKPlaidFinanceKit.PLKFinanceKitStatus.unavailable.rawValue, 0)
+        XCTAssertEqual(PLKPlaidFinanceKit.PLKFinanceKitStatus.notDetermined.rawValue, 1)
+        XCTAssertEqual(PLKPlaidFinanceKit.PLKFinanceKitStatus.denied.rawValue, 2)
+        XCTAssertEqual(PLKPlaidFinanceKit.PLKFinanceKitStatus.authorized.rawValue, 3)
+        XCTAssertEqual(PLKPlaidFinanceKit.PLKFinanceKitStatus.unknown.rawValue, 4)
+    }
+
     // MARK: - FinanceKitError Conversion Tests
 
     func testInvalidTokenErrorConvertsToObjC() {
@@ -151,6 +169,103 @@ final class PLKPlaidFinanceKitTests: XCTestCase {
         XCTAssertEqual(nsError.localizedDescription, underlyingMessage)
     }
 
+    func testDataUnavailableErrorConvertsToObjC() {
+        let swiftError = FinanceKitError.dataUnavailable(message: "unavailable")
+        let objcError = swiftError.toObjC
+
+        XCTAssertEqual(objcError, .dataUnavailable)
+        XCTAssertEqual(objcError.rawValue, 8)
+    }
+
+    func testDataUnavailableErrorToNSError() {
+        let nsError = FinanceKitError.dataUnavailable(message: "unavailable").toNSError
+
+        XCTAssertEqual(nsError.domain, kPLKDefaultErrorDomain)
+        XCTAssertEqual(nsError.code, PLKPlaidFinanceKitError.dataUnavailable.rawValue)
+        XCTAssertEqual(nsError.userInfo["message"] as? String, "unavailable")
+        XCTAssertEqual(nsError.localizedDescription, "unavailable")
+    }
+
+    func testPermissionNotRequestedErrorConvertsToObjC() {
+        let swiftError = FinanceKitError.permissionNotRequested(message: "not requested")
+        let objcError = swiftError.toObjC
+
+        XCTAssertEqual(objcError, .permissionNotRequested)
+        XCTAssertEqual(objcError.rawValue, 7)
+    }
+
+    func testPermissionNotRequestedErrorToNSError() {
+        let nsError = FinanceKitError.permissionNotRequested(message: "not requested").toNSError
+
+        XCTAssertEqual(nsError.domain, kPLKDefaultErrorDomain)
+        XCTAssertEqual(nsError.code, PLKPlaidFinanceKitError.permissionNotRequested.rawValue)
+        XCTAssertEqual(nsError.userInfo["message"] as? String, "not requested")
+        XCTAssertEqual(nsError.userInfo[NSLocalizedDescriptionKey] as? String, "not requested")
+    }
+
+    func testChannelClosedErrorToNSError() {
+        let nsError = FinanceKitError.channelClosed(message: "closed").toNSError
+
+        XCTAssertEqual(nsError.domain, kPLKDefaultErrorDomain)
+        XCTAssertEqual(nsError.code, PLKPlaidFinanceKitError.channelClosed.rawValue)
+        XCTAssertEqual(nsError.code, 9)
+        XCTAssertEqual(nsError.userInfo["message"] as? String, "closed")
+        XCTAssertEqual(nsError.localizedDescription, "closed")
+    }
+
+    func testSyncTimedOutErrorToNSError() {
+        let nsError = FinanceKitError.syncTimedOut(message: "timed out").toNSError
+
+        XCTAssertEqual(nsError.domain, kPLKDefaultErrorDomain)
+        XCTAssertEqual(nsError.code, PLKPlaidFinanceKitError.syncTimedOut.rawValue)
+        XCTAssertEqual(nsError.code, 10)
+        XCTAssertEqual(nsError.userInfo["message"] as? String, "timed out")
+        XCTAssertEqual(nsError.localizedDescription, "timed out")
+    }
+
+    func testNoAccountsErrorConvertsToObjC() {
+        let swiftError = FinanceKitError.noAccounts(message: "no accounts shared")
+        let objcError = swiftError.toObjC
+
+        XCTAssertEqual(objcError, .noAccounts)
+        XCTAssertEqual(objcError.rawValue, 5)
+    }
+
+    func testSyncFailedErrorConvertsToObjC() {
+        let swiftError = FinanceKitError.syncFailed(errorType: "t", errorCode: "c", message: "u")
+        let objcError = swiftError.toObjC
+
+        XCTAssertEqual(objcError, .syncFailed)
+        XCTAssertEqual(objcError.rawValue, 6)
+    }
+
+    func testNoAccountsErrorToNSError() {
+        let nsError = FinanceKitError.noAccounts(message: "no accounts shared").toNSError
+
+        XCTAssertEqual(nsError.domain, kPLKDefaultErrorDomain)
+        XCTAssertEqual(nsError.code, PLKPlaidFinanceKitError.noAccounts.rawValue)
+        XCTAssertEqual(nsError.userInfo["message"] as? String, "no accounts shared")
+        XCTAssertEqual(nsError.localizedDescription, "no accounts shared")
+        XCTAssertNil(nsError.userInfo[kPLKFinanceKitErrorTypeKey])
+        XCTAssertNil(nsError.userInfo[kPLKFinanceKitErrorCodeKey])
+    }
+
+    func testSyncFailedErrorToNSErrorCarriesTypeAndCode() {
+        let swiftError = FinanceKitError.syncFailed(
+            errorType: "ITEM_ERROR",
+            errorCode: "ITEM_LOGIN_REQUIRED",
+            message: "login required"
+        )
+        let nsError = swiftError.toNSError
+
+        XCTAssertEqual(nsError.domain, kPLKDefaultErrorDomain)
+        XCTAssertEqual(nsError.code, PLKPlaidFinanceKitError.syncFailed.rawValue)
+        XCTAssertEqual(nsError.userInfo["message"] as? String, "login required")
+        XCTAssertEqual(nsError.localizedDescription, "login required")
+        XCTAssertEqual(nsError.userInfo[kPLKFinanceKitErrorTypeKey] as? String, "ITEM_ERROR")
+        XCTAssertEqual(nsError.userInfo[kPLKFinanceKitErrorCodeKey] as? String, "ITEM_LOGIN_REQUIRED")
+    }
+
     // MARK: - PLKPlaidFinanceKitError Raw Values
 
     func testPlaidFinanceKitErrorRawValues() {
@@ -160,6 +275,12 @@ final class PLKPlaidFinanceKitTests: XCTestCase {
         XCTAssertEqual(PLKPlaidFinanceKitError.linkApiError.rawValue, 2)
         XCTAssertEqual(PLKPlaidFinanceKitError.permissionAccessError.rawValue, 3)
         XCTAssertEqual(PLKPlaidFinanceKitError.unknown.rawValue, 4)
+        XCTAssertEqual(PLKPlaidFinanceKitError.noAccounts.rawValue, 5)
+        XCTAssertEqual(PLKPlaidFinanceKitError.syncFailed.rawValue, 6)
+        XCTAssertEqual(PLKPlaidFinanceKitError.permissionNotRequested.rawValue, 7)
+        XCTAssertEqual(PLKPlaidFinanceKitError.dataUnavailable.rawValue, 8)
+        XCTAssertEqual(PLKPlaidFinanceKitError.channelClosed.rawValue, 9)
+        XCTAssertEqual(PLKPlaidFinanceKitError.syncTimedOut.rawValue, 10)
     }
 
     // MARK: - Integration Tests
@@ -170,6 +291,12 @@ final class PLKPlaidFinanceKitTests: XCTestCase {
             (.permissionError(message: "test"), .permissionError),
             (.linkApiError(message: "test"), .linkApiError),
             (.permissionAccessError(message: "test"), .permissionAccessError),
+            (.permissionNotRequested(message: "test"), .permissionNotRequested),
+            (.dataUnavailable(message: "test"), .dataUnavailable),
+            (.noAccounts(message: "test"), .noAccounts),
+            (.syncFailed(errorType: "t", errorCode: "c", message: "test"), .syncFailed),
+            (.channelClosed(message: "test"), .channelClosed),
+            (.syncTimedOut(message: "test"), .syncTimedOut),
             (.unknown(error: NSError(domain: "test", code: 0)), .unknown),
         ]
 
@@ -229,6 +356,8 @@ final class PLKPlaidFinanceKitTests: XCTestCase {
             (.permissionError(message: ""), PLKPlaidFinanceKitError.permissionError.rawValue),
             (.linkApiError(message: ""), PLKPlaidFinanceKitError.linkApiError.rawValue),
             (.permissionAccessError(message: ""), PLKPlaidFinanceKitError.permissionAccessError.rawValue),
+            (.noAccounts(message: ""), PLKPlaidFinanceKitError.noAccounts.rawValue),
+            (.syncFailed(errorType: "", errorCode: "", message: ""), PLKPlaidFinanceKitError.syncFailed.rawValue),
             (.unknown(error: NSError(domain: "", code: 0)), PLKPlaidFinanceKitError.unknown.rawValue),
         ]
 

@@ -377,6 +377,10 @@ static NSString *const kPLKExitErrorRawJSONKey = @"PLKExitErrorRawJSONKey";
 static NSString *const kPLKExitErrorUnknownTypeKey = @"kPLKExitErrorUnknownTypeKey";
 static NSString *const kPLKExitErrorCodeKey = @"kPLKExitErrorCodeKey";
 
+/// userInfo keys on the NSError for PLKPlaidFinanceKitErrorSyncFailed: the API error type and code the server ended the sync with.
+static NSString *const kPLKFinanceKitErrorTypeKey = @"PLKFinanceKitErrorTypeKey";
+static NSString *const kPLKFinanceKitErrorCodeKey = @"PLKFinanceKitErrorCodeKey";
+
 static NSString *const kPLKExitErrorInvalidRequestDomain = @"PLKExitErrorInvalidRequestDomain";
 static NSString *const kPLKExitErrorInvalidInputDomain = @"PLKExitErrorInvalidInputDomain";
 static NSString *const kPLKExitErrorInstitutionErrorDomain = @"PLKExitErrorInstitutionErrorDomain";
@@ -670,5 +674,29 @@ typedef void(^PLKDismissalHandler)(UIViewController *);
 - (void) start;
 
 @end
+
+/// The `code` of the NSError a FinanceKit sync fails with, in the kPLKDefaultErrorDomain domain. The values
+/// are stable; new cases are only added at the end.
+typedef NS_ENUM(NSInteger, PLKPlaidFinanceKitError) {
+    PLKPlaidFinanceKitErrorInvalidToken = 0,
+    PLKPlaidFinanceKitErrorPermissionError = 1,
+    PLKPlaidFinanceKitErrorLinkApiError = 2,
+    PLKPlaidFinanceKitErrorPermissionAccessError = 3,
+    PLKPlaidFinanceKitErrorUnknown = 4,
+    /// The sync ended because Apple returned no accounts shared with this app.
+    PLKPlaidFinanceKitErrorNoAccounts = 5,
+    /// The server ended the sync with another API error, given under kPLKFinanceKitErrorTypeKey and
+    /// kPLKFinanceKitErrorCodeKey in the error's userInfo.
+    PLKPlaidFinanceKitErrorSyncFailed = 6,
+    /// FinanceKit access has not been requested yet and the sync was told not to request it.
+    PLKPlaidFinanceKitErrorPermissionNotRequested = 7,
+    /// This device, region or OS version cannot provide FinanceKit data. The sync did not start.
+    PLKPlaidFinanceKitErrorDataUnavailable = 8,
+    /// The server closed the sync channel before the sync completed. Start a new sync to retry.
+    PLKPlaidFinanceKitErrorChannelClosed = 9,
+    /// iOS was about to suspend the app, or an hour passed, before the sync finished. Start a new sync
+    /// while the app is active to retry.
+    PLKPlaidFinanceKitErrorSyncTimedOut = 10
+};
 
 NS_ASSUME_NONNULL_END
